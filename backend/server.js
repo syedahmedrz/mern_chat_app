@@ -1,5 +1,6 @@
 const express = require("express");
 const chats = require("./dummydata/chat")
+require("dotenv").config()
 
 const app = express()
 
@@ -11,6 +12,14 @@ app.get('/api/chat', (req, res) => {
     res.json(chats);
 })
 
-app.listen(5000, () => {
-    console.log("http://localhost:5000")
+
+app.get('/api/chat/:id', (req, res) => {
+    let chat = chats.find((c)=>c._id == req.params.id)
+    res.json(chat)
+})
+
+let port = process.env.PORT;
+
+app.listen(port, () => {
+    console.log(`http://localhost:${port}`)
 })
