@@ -1,22 +1,27 @@
 const express = require("express");
 const chats = require("./dummydata/chat")
-require("dotenv").config()
+require("dotenv").config({
+    path: "../.env"
+})
+const cors = require("cors");
+const connectDB = require("./config/db");
+const userRoutes = require('./routes/userRoutes');
 
+connectDB()
 const app = express()
+
+var corsOptions = {
+    origin: 'http://localhost:3000',
+}
+
+app.use(cors(corsOptions))
+app.use(express.json())
 
 app.get('/', (req, res) => {
     res.end("Home page");
 })
 
-app.get('/api/chat', (req, res) => {
-    res.json(chats);
-})
-
-
-app.get('/api/chat/:id', (req, res) => {
-    let chat = chats.find((c)=>c._id == req.params.id)
-    res.json(chat)
-})
+app.use("/api/user", userRoutes)
 
 let port = process.env.PORT;
 
